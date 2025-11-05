@@ -1,0 +1,45 @@
+generator client { provider = "prisma-client-js" }
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+}
+
+enum Role { ADMIN }
+
+model PaymentProviderSetting {
+  id        String   @id @default(cuid())
+  type      String
+  dataEnc   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ShippingProviderSetting {
+  id        String   @id @default(cuid())
+  type      String
+  dataEnc   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id            String   @id @default(cuid())
+  number        String   @unique
+  status        String   @default("pending")
+  totalCents    Int
+  currency      String   @default("UAH")
+  customerEmail String?
+  shippingJson  String?
+  paymentJson   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
